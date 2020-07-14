@@ -77,17 +77,15 @@ custom_test_runner() {
     local forwarded_port=4723 # re-use appium server port if on device farm host
 
     local app_id
+    local main_activity_package
     
     # CUSTOMIZATION{jeebb}: allow user to look for the MainActivity in different package with the applicationId
     # Assume that there is a "sylph.yml" in the root of the project
-    app_id=$(grep main_activity_package sylph.yaml | awk '{print $2}' | tr -d '"')
-    if [ -z "$app_id" ]; then
-        echo "No defined value for main_activity_package in <root>/sylph.yml. Going to get from build.gradle ..."
-        
-        # CUSTOMIZATION{jeebb}: "applicationId \"" => to distinguish applicationId "<value>" with applicationIdSuffix "<value>"
-        # this one is a little opinionated because I set the applicationId in that way
-        app_id=$(grep "applicationId \"" android/app/build.gradle | awk '{print $2}' | tr -d '"')
-    fi
+    main_activity_package=$(grep main_activity_package sylph.yaml | awk '{print $2}' | tr -d '"')
+    
+    # CUSTOMIZATION{jeebb}: "applicationId \"" => to distinguish applicationId "<value>" with applicationIdSuffix "<value>"
+    # this one is a little opinionated because I set the applicationId in that way
+    app_id=$(grep "applicationId \"" android/app/build.gradle | awk '{print $2}' | tr -d '"')
     
 #    local package
 #    package=app_id
@@ -121,7 +119,13 @@ custom_test_runner() {
     adb logcat -c
 
     # start app on device
-    adb shell am start -a android.intent.action.RUN -f 0x20000000 --ez enable-background-compilation true --ez enable-dart-profiling true --ez enable-checked-mode true --ez verify-entry-points true --ez start-paused true "$app_id/.MainActivity"
+    
+    # CUSTOMIZATION{jeebb}: prefer main_activity_package over app_id
+    if [ -n "$main_activity_package" ]; then
+        adb shell am start -a android.intent.action.RUN -f 0x20000000 --ez enable-background-compilation true --ez enable-dart-profiling true --ez enable-checked-mode true --ez verify-entry-points true --ez start-paused true "$main_activity_package/.MainActivity"
+    else
+        adb shell am start -a android.intent.action.RUN -f 0x20000000 --ez enable-background-compilation true --ez enable-dart-profiling true --ez enable-checked-mode true --ez verify-entry-points true --ez start-paused true "$app_id/.MainActivity"
+    fi
 
     # wait for observatory startup on device and get port number
     obs_str=$( (adb logcat -v time &) | grep -m 1 "Observatory listening on")
