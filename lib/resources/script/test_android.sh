@@ -77,7 +77,9 @@ custom_test_runner() {
     local forwarded_port=4723 # re-use appium server port if on device farm host
 
     local app_id
-    app_id=$(grep applicationId android/app/build.gradle | awk '{print $2}' | tr -d '"')
+    
+    # "applicationId \"" => to distinguish applicationId "<value>" with applicationIdSuffix "<value>"
+    app_id=$(grep "applicationId \"" android/app/build.gradle | awk '{print $2}' | tr -d '"')
 #    local package
 #    package=app_id
 
