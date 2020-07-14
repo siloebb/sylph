@@ -78,6 +78,7 @@ custom_test_runner() {
 
     local app_id
     local main_activity_package
+    local flavor
     
     # CUSTOMIZATION{jeebb}: allow user to look for the MainActivity in different package with the applicationId
     # Assume that there is a "sylph.yml" in the root of the project
@@ -88,6 +89,14 @@ custom_test_runner() {
     # CUSTOMIZATION{jeebb}: "applicationId \"" => to distinguish applicationId "<value>" with applicationIdSuffix "<value>"
     # this one is a little opinionated because I set the applicationId in that way
     app_id=$(grep "applicationId \"" android/app/build.gradle | awk '{print $2}' | tr -d '"')
+    
+    # CUSTOMIZATION{jeebb}: get flavor name for appending to app_id and form a correct app_id in a flavorful environment
+    flavor = $(grep flavor sylph.yaml | awk '{print $2}' | tr -d '"')
+    if [ -n "$flavor" ]; then
+        app_id = "$app_id.$flavor"
+        
+        echo "Finallize app id with flavor $flavor : $app_id"
+    fi
     
 #    local package
 #    package=app_id
@@ -124,7 +133,7 @@ custom_test_runner() {
     
     # CUSTOMIZATION{jeebb}: prefer main_activity_package over app_id
     if [ -n "$main_activity_package" ]; then
-        adb shell am start -a android.intent.action.MAIN -f 0x20000000 --ez enable-background-compilation true --ez enable-dart-profiling true --ez enable-checked-mode true --ez verify-entry-points true --ez start-paused true "$main_activity_package.MainActivity"
+        adb shell am start -a android.intent.action.RUN -f 0x20000000 --ez enable-background-compilation true --ez enable-dart-profiling true --ez enable-checked-mode true --ez verify-entry-points true --ez start-paused true "$app_id/$main_activity_package.MainActivity"
     else
         adb shell am start -a android.intent.action.RUN -f 0x20000000 --ez enable-background-compilation true --ez enable-dart-profiling true --ez enable-checked-mode true --ez verify-entry-points true --ez start-paused true "$app_id/.MainActivity"
     fi
