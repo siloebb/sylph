@@ -124,7 +124,7 @@ custom_test_runner() {
     
     # CUSTOMIZATION{jeebb}: prefer main_activity_package over app_id
     if [ -n "$main_activity_package" ]; then
-        adb shell am start -a android.intent.action.RUN -f 0x20000000 --ez enable-background-compilation true --ez enable-dart-profiling true --ez enable-checked-mode true --ez verify-entry-points true --ez start-paused true "$app_id/$main_activity_package.MainActivity"
+        adb shell am start -a android.intent.action.MAIN -f 0x20000000 --ez enable-background-compilation true --ez enable-dart-profiling true --ez enable-checked-mode true --ez verify-entry-points true --ez start-paused true "$main_activity_package/.MainActivity"
     else
         adb shell am start -a android.intent.action.RUN -f 0x20000000 --ez enable-background-compilation true --ez enable-dart-profiling true --ez enable-checked-mode true --ez verify-entry-points true --ez start-paused true "$app_id/.MainActivity"
     fi
