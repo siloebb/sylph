@@ -83,6 +83,8 @@ custom_test_runner() {
     # Assume that there is a "sylph.yml" in the root of the project
     main_activity_package=$(grep main_activity_package sylph.yaml | awk '{print $2}' | tr -d '"')
     
+    echo "Main activity package name: $main_activity_package"
+    
     # CUSTOMIZATION{jeebb}: "applicationId \"" => to distinguish applicationId "<value>" with applicationIdSuffix "<value>"
     # this one is a little opinionated because I set the applicationId in that way
     app_id=$(grep "applicationId \"" android/app/build.gradle | awk '{print $2}' | tr -d '"')
