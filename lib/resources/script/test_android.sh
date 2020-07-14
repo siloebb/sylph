@@ -78,8 +78,17 @@ custom_test_runner() {
 
     local app_id
     
-    # "applicationId \"" => to distinguish applicationId "<value>" with applicationIdSuffix "<value>"
-    app_id=$(grep "applicationId \"" android/app/build.gradle | awk '{print $2}' | tr -d '"')
+    # CUSTOMIZATION{jeebb}: allow user to look for the MainActivity in different package with the applicationId
+    # Assume that there is a "sylph.yml" in the root of the project
+    app_id=$(grep main_activity_package sylph.yml | awk '{print $2}' | tr -d '"')
+    if [ -z "$app_id" ]; then
+        echo "No defined value for main_activity_package in <root>/sylph.yml. Going to get from build.gradle ..."
+        
+        # CUSTOMIZATION{jeebb}: "applicationId \"" => to distinguish applicationId "<value>" with applicationIdSuffix "<value>"
+        # this one is a little opinionated because I set the applicationId in that way
+        app_id=$(grep "applicationId \"" android/app/build.gradle | awk '{print $2}' | tr -d '"')
+    fi
+    
 #    local package
 #    package=app_id
 

@@ -29,6 +29,7 @@ phases:
 
       # install flutter
       - echo "Install flutter"
+      # CUSTOMIZATION{jeebb}: set to latest flutter version
       - FLUTTER_VERSION='1.17.5-stable'
       - >-
         if [ $DEVICEFARM_DEVICE_PLATFORM_NAME = "Android" ];
