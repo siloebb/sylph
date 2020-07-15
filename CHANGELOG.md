@@ -1,3 +1,6 @@
+## 0.7.3
+- Adapt the with my personal project in a multi-flavor environment
+
 ## 0.7.2
 - Upgraded apps and build #91
 
