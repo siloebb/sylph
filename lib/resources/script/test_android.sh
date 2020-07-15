@@ -91,9 +91,9 @@ custom_test_runner() {
     app_id=$(grep "applicationId \"" android/app/build.gradle | awk '{print $2}' | tr -d '"')
     
     # CUSTOMIZATION{jeebb}: get flavor name for appending to app_id and form a correct app_id in a flavorful environment
-    flavor = $(grep flavor sylph.yaml | awk '{print $2}' | tr -d '"')
+    flavor=$(grep flavor sylph.yaml | awk '{print $2}' | tr -d '"')
     if [ -n "$flavor" ]; then
-        app_id = "$app_id.$flavor"
+        app_id="$app_id.$flavor"
         
         echo "Finallize app id with flavor $flavor : $app_id"
     fi
