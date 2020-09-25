@@ -169,12 +169,12 @@ remove_archive_disabler() {
   local removed_disabler
 
   # search for and remove pattern
-#   if [[ $original =~ $re ]]; then
-#     removed_disabler=${BASH_REMATCH[1]}${BASH_REMATCH[2]}
-#   else
-#     echo "FATAL ERROR: removal of archive disabler failed. Please create issue in https://github.com/mmcc007/sylph/issues"
-#     exit 1
-#   fi
+  if [[ $original =~ $re ]]; then
+    removed_disabler=${BASH_REMATCH[1]}${BASH_REMATCH[2]}
+  else
+    echo "FATAL ERROR: removal of archive disabler failed. Please create issue in https://github.com/mmcc007/sylph/issues"
+    exit 1
+  fi
 
   # write out new script
   echo "$removed_disabler" > "$xcode_backend_path"
