@@ -30,19 +30,19 @@ phases:
       # install flutter
       - echo "Install flutter"
       # CUSTOMIZATION{jeebb}: set to latest flutter version
-      - FLUTTER_VERSION='1.20.2-stable'
+      - FLUTTER_VERSION='v1.16.3-dev'
       - >-
         if [ $DEVICEFARM_DEVICE_PLATFORM_NAME = "Android" ];
         then
             # Install Flutter
-            curl https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_$FLUTTER_VERSION.tar.xz -o flutter_linux.tar.xz
+            curl https://storage.googleapis.com/flutter_infra/releases/dev/linux/flutter_linux_$FLUTTER_VERSION.tar.xz -o flutter_linux.tar.xz
             tar xf flutter_linux.tar.xz
         fi
 
         if [ $DEVICEFARM_DEVICE_PLATFORM_NAME = "iOS" ];
         then
             # Install Flutter
-            curl https://storage.googleapis.com/flutter_infra/releases/stable/macos/flutter_macos_$FLUTTER_VERSION.zip -o flutter_macos.zip
+            curl https://storage.googleapis.com/flutter_infra/releases/dev/macos/flutter_macos_$FLUTTER_VERSION.zip -o flutter_macos.zip
             unzip -qq flutter_macos.zip
         fi
 
